@@ -28,6 +28,14 @@ Levels are stored in the `collections/` directory as 10x10 text grids using the 
 | `o` | Immovable obstacle (Pine tree) |
 | `_` | Empty walkable space |
 
+## Controls
+
+- **Move Up:** `W` or `Up Arrow`
+- **Move Down:** `S` or `Down Arrow`
+- **Move Left:** `A` or `Left Arrow`
+- **Move Right:** `D` or `Right Arrow`
+- **Restart Level:** `R`
+
 ## Project Structure
 
 ```text

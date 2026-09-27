@@ -1,4 +1,4 @@
-"""Main game engine handling Pygame lifecycle, event loop, and level progression."""
+"""Main game engine handling Pygame lifecycle, event loop, level progression, and restarts."""
 
 import time
 import pygame
@@ -28,7 +28,7 @@ class GameEngine:
         cell_width = self.display_width // 10
         cell_height = self.display_height // 10
 
-        # Load at least 5 levels as required by the assignment
+        # Load levels 1 to 5 from collections/
         levels = LevelFactory(cell_width, cell_height, 1, 2, 3, 4, 5)
         level = levels.get_level(self.current_level)
 
@@ -42,6 +42,14 @@ class GameEngine:
                     is_running = False
 
                 elif event.type == pygame.KEYDOWN:
+                    # Restart current level if boxes are stuck (deadlock)
+                    if event.key == pygame.K_r:
+                        level = levels.reload_level(cell_width, cell_height, self.current_level)
+                        start_time = time.time()
+                        print(f"\n--- Level {self.current_level} Restarted ---")
+                        continue
+
+                    # Movement directions
                     dx, dy = 0, 0
                     if event.key in (pygame.K_DOWN, pygame.K_s):
                         dy = cell_height
@@ -56,7 +64,7 @@ class GameEngine:
                         player = level.get_player()
                         self.move_player(player, dx, dy, level)
 
-                        # Check level completion
+                        # Check if all boxes are in slots
                         if level.completed():
                             elapsed_time = time.time() - start_time
                             player.set_score(round(elapsed_time, 2))
@@ -73,7 +81,7 @@ class GameEngine:
                                 print("Congratulations! You have completed all levels!")
                                 is_running = False
 
-            # 2. Rendering (outside event loop, per-frame)
+            # 2. Rendering (per frame, outside event loop)
             level.draw(game_display)
             pygame.display.update()
 

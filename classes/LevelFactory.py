@@ -1,4 +1,4 @@
-"""Level factory module parsing files and instantiating game objects."""
+"""Level factory module responsible for parsing level files and instantiating entities."""
 
 import os
 from classes.Level import Level
@@ -16,23 +16,29 @@ from exceptions import (
 
 
 class LevelFactory:
-    """Parses text configuration files and creates configured Level objects."""
+    """Reads level configuration files and creates configured Level instances."""
 
     def __init__(self, width: int, height: int, *level_numbers: int):
         self.__level_map = {}
-        # Preload shared textures once across all levels
+        # Preload textures once across all levels
         self.__images = ImageCollection(width, height)
         self.load_levels(width, height, *level_numbers)
 
     def load_levels(self, width: int, height: int, *level_numbers: int) -> None:
-        """Loads and parses level files based on variable arguments."""
+        """Loads and parses level files based on variable numeric arguments."""
         for num in level_numbers:
             filepath = os.path.join("collections", f"level{num}.txt")
             level = self.__load_level(width, height, filepath)
             self.__level_map[num] = level
 
+    def reload_level(self, width: int, height: int, level_id: int) -> Level:
+        """Reloads a fresh instance of the specified level from disk."""
+        filepath = os.path.join("collections", f"level{level_id}.txt")
+        self.__level_map[level_id] = self.__load_level(width, height, filepath)
+        return self.__level_map[level_id]
+
     def get_level_count(self) -> int:
-        """Returns the number of loaded levels."""
+        """Returns the total number of loaded levels."""
         return len(self.__level_map)
 
     def get_level(self, level_id: int) -> Level:
@@ -51,14 +57,14 @@ class LevelFactory:
             for line_number, line in enumerate(lines, start=1):
                 elements = list(line)
 
-                # Requisite: Invalid characters terminate execution with file and line info
+                # Requirement: Invalid characters terminate execution with error message
                 for char in elements:
                     if char not in "pobs_":
                         raise InvalidCharacterError(
                             f"Invalid character '{char}' found in file '{filepath}' at line {line_number}."
                         )
 
-                # Requisite: Extra characters are logged and truncated
+                # Requirement: Extra characters are logged and truncated
                 try:
                     if len(elements) > 10:
                         raise ExtraCharacterError(
@@ -68,7 +74,7 @@ class LevelFactory:
                     print(err)
                     elements = elements[:10]
 
-                # Requisite: Missing characters are logged and padded with '_'
+                # Requirement: Missing characters are logged and padded with '_'
                 try:
                     if len(elements) < 10:
                         raise MissingElementError(

@@ -1,4 +1,4 @@
-"""Custom domain exceptions for sokoban level loading and validation."""
+"""Custom domain exceptions for SokobanDaWish level loading and validation."""
 
 
 class SokobanError(Exception):
