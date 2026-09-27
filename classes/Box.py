@@ -1,7 +1,11 @@
+"""Pushable box entity module."""
+
+import pygame
 from classes.MovableObject import MovableObject
 
-# class Box
+
 class Box(MovableObject):
-    def __init__(self, image, x, y, width, height):
+    """Represents a pushable puzzle box."""
+
+    def __init__(self, image: pygame.Surface, x: int, y: int, width: int, height: int):
         super().__init__(image, x, y, width, height)
-        

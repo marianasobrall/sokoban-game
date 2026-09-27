@@ -1,6 +1,11 @@
+"""Immovable blocking entity module."""
+
+import pygame
 from classes.GameObject import GameObject
 
-# class Obstacle
+
 class Obstacle(GameObject):
-    def __init__(self, image, x, y, width, height):
+    """Base class for static obstacles that cannot be traversed or pushed."""
+
+    def __init__(self, image: pygame.Surface, x: int, y: int, width: int, height: int):
         super().__init__(image, x, y, width, height)

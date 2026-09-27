@@ -1,29 +1,37 @@
+"""Base game object module for all entities in the Sokoban grid."""
+
 import pygame
 
-#class GameObject
+
 class GameObject(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, width, height):
+    """Represents a renderable sprite entity inside the 10x10 game grid."""
+
+    def __init__(self, image: pygame.Surface, x: int, y: int, width: int, height: int):
         super().__init__()
-        self._surface = pygame.Surface((width, height))
         self._image = image
-        self._rectangle = self._image.get_rect()
+        self.rect = self._image.get_rect()
         self.set_new_position(x, y)
-        self.rect = self.get_rectangle()
-        
-    def get_surface(self):
-        return self._surface
-    
-    def get_image(self):
+
+    def get_surface(self) -> pygame.Surface:
+        """Returns the image surface."""
         return self._image
-    
-    def get_rectangle(self):
-        return self._rectangle
-    
-    def set_image(self, image):
+
+    def get_image(self) -> pygame.Surface:
+        """Returns the sprite surface."""
+        return self._image
+
+    def set_image(self, image: pygame.Surface) -> None:
+        """Updates the sprite surface."""
         self._image = image
-    
-    def set_new_position(self, x, y):
-        self._rectangle.topleft = (x, y)
-    
-    def update():
+
+    def get_rectangle(self) -> pygame.Rect:
+        """Returns the bounding rectangle used for positioning and collisions."""
+        return self.rect
+
+    def set_new_position(self, x: int, y: int) -> None:
+        """Sets the top-left coordinate of the entity."""
+        self.rect.topleft = (x, y)
+
+    def update(self) -> None:
+        """Hook for per-frame entity logic updates."""
         pass
